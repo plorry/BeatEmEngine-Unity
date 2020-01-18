@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BattlerBehaviour : MonoBehaviour
 {
+    SideCollider left;
+    SideCollider right;
+    SideCollider front;
+    SideCollider back;
     private float OFFSET_CONST = 0.65f;
     float speed = 0.05f;
     Vector3 dirVector;
@@ -29,10 +33,23 @@ public class BattlerBehaviour : MonoBehaviour
         { "ATTACK", false }
     };
     private bool beingHit = false;
-    
+    private List<GameObject> hexSurround;
+
     // Start is called before the first frame update
     void Start() {
-        playerSprite.SetParent(this);
+        vPos = PosToVPos(transform.position);
+    }
+
+    private void Awake() {
+        InitColliders();
+        InitHexSurround();
+    }
+
+    void InitColliders() {
+        front = transform.Find("Front").GetComponent<SideCollider>();
+        back = transform.Find("Back").GetComponent<SideCollider>();
+        left = transform.Find("Left").GetComponent<SideCollider>();
+        right = transform.Find("Right").GetComponent<SideCollider>();
     }
 
     // Update is called once per frame
@@ -63,7 +80,7 @@ public class BattlerBehaviour : MonoBehaviour
         // Get the direction of movement from the combined directions
         dirVector = GetDirVector();
         // apply the movement by the speed value
-        vPos += (dirVector * speed + impulseVectorH);
+        vPos += (dirVector * (speed / (Time.deltaTime * 33)) + impulseVectorH);
         // and translate the virtual position to a coordinate position
         transform.position = VPosToPos(vPos);
     }
@@ -77,16 +94,16 @@ public class BattlerBehaviour : MonoBehaviour
     Vector3 GetDirVector() {
         Vector3 vec = new Vector3();
         if (hasControl || inAir) {
-            if (directionStatus["RIGHT"]) {
+            if (directionStatus["RIGHT"] && !right.IsBlocked()) {
                 vec += Vector3.right;
             }
-            if (directionStatus["LEFT"]) {
+            if (directionStatus["LEFT"] && !left.IsBlocked()) {
                 vec += Vector3.left;
             }
-            if (directionStatus["UP"]) {
+            if (directionStatus["UP"] && !back.IsBlocked()) {
                 vec += Vector3.forward;
             }
-            if (directionStatus["DOWN"]) {
+            if (directionStatus["DOWN"] && !front.IsBlocked()) {
                 vec += Vector3.back;
             }
         }
@@ -96,6 +113,10 @@ public class BattlerBehaviour : MonoBehaviour
     Vector3 VPosToPos(Vector3 vPos) {
         // return an actual coordinate position in space from a vPos
         return new Vector3(vPos.x, vPos.z * 0.5f - OFFSET_CONST, vPos.z * 0.866f);
+    }
+
+    Vector3 PosToVPos(Vector3 pos) {
+        return new Vector3(pos.x, (pos.z + OFFSET_CONST) / 0.5f, pos.z / 0.866f);
     }
 
     void ApplyGravity() {
@@ -219,5 +240,9 @@ public class BattlerBehaviour : MonoBehaviour
 
     public string GetFacingDirection() {
         return facingDirection;
+    }
+
+    public void SetStartPosition(int x, int z) {
+        vPos = new Vector3(x, 0, z);
     }
 }

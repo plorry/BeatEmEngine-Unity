@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BattlerSpriteBehaviour : MonoBehaviour
 {
-    private BattlerBehaviour parent;
     private Collider myCollider;
     private Rigidbody rb;
     private bool falling = false;
@@ -24,20 +23,18 @@ public class BattlerSpriteBehaviour : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         switch (other.gameObject.tag) {
             case "Floor":
-                parent.Land();
+                GetParent().Land();
                 break;
             case "AttackBox":
                 GetParent().Hit(other.gameObject.GetComponent<AttackBox>().GetFacingDirection());
                 break;
+            default:
+                break;
         }
     }
 
-    public void SetParent(BattlerBehaviour newParent) {
-        parent = newParent;
-    }
-
     public BattlerBehaviour GetParent() {
-        return parent;
+        return transform.parent.GetComponent<BattlerBehaviour>();
     }
 
     public bool Fall(float distance) {
@@ -51,14 +48,14 @@ public class BattlerSpriteBehaviour : MonoBehaviour
     }
 
     public void EndAttack() {
-        parent.EndAttack();
+        GetParent().EndAttack();
     }
 
     public Vector3 GetActionPoint() {
-        return parent.GetActionPoint();
+        return GetParent().GetActionPoint();
     }
 
     private void Land() {
-        parent.Land();
+        GetParent().Land();
     }
 }

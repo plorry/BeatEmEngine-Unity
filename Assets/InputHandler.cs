@@ -43,8 +43,8 @@ public class InputHandler : MonoBehaviour {
         EventManager.StartListening("KeyDown-DownArrow", player1.GoDown);
         EventManager.StartListening("KeyUp-UpArrow", player1.StopUp);
         EventManager.StartListening("KeyUp-DownArrow", player1.StopDown);
-		EventManager.StartListening("KeyDown-Space", player1.Jump);
-		EventManager.StartListening("KeyUp-Space", player1.ResetJump);
+		// EventManager.StartListening("KeyDown-Space", player1.Jump);
+		// EventManager.StartListening("KeyUp-Space", player1.ResetJump);
 		EventManager.StartListening("KeyDown-A", player1.Attack);
 		EventManager.StartListening("KeyUp-A", player1.ResetAttack);
     }
