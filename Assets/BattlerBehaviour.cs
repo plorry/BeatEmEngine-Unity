@@ -38,18 +38,36 @@ public class BattlerBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         vPos = PosToVPos(transform.position);
+        InitHexSurround();
     }
 
     private void Awake() {
         InitColliders();
-        InitHexSurround();
     }
 
-    void InitColliders() {
+    private void InitColliders() {
         front = transform.Find("Front").GetComponent<SideCollider>();
         back = transform.Find("Back").GetComponent<SideCollider>();
         left = transform.Find("Left").GetComponent<SideCollider>();
         right = transform.Find("Right").GetComponent<SideCollider>();
+    }
+
+    private void InitHexSurround() {
+        hexSurround = new List<GameObject>();
+
+        hexSurround.Add(CreateHexPoint(2.5f, 0));
+        hexSurround.Add(CreateHexPoint(-2.5f, 0));
+        hexSurround.Add(CreateHexPoint(1.75f, 2.5f));
+        hexSurround.Add(CreateHexPoint(1.75f, -2.5f));
+        hexSurround.Add(CreateHexPoint(-1.75f, 2.5f));
+        hexSurround.Add(CreateHexPoint(-1.75f, -2.5f));
+    }
+
+    private GameObject CreateHexPoint(float x, float z) {
+        GameObject point = new GameObject();
+        point.transform.SetParent(transform, false);
+        point.transform.position = transform.position + VPosToPos(new Vector3(x, 0, z));
+        return point;
     }
 
     // Update is called once per frame
