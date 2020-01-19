@@ -9,7 +9,7 @@ public class BattlerBehaviour : MonoBehaviour
     SideCollider front;
     SideCollider back;
     private float OFFSET_CONST = 0.65f;
-    float speed = 0.05f;
+    public float speed = 0.05f;
     Vector3 dirVector;
     public BattlerSpriteBehaviour playerSprite;
     public AttackBox attackBox;
@@ -23,7 +23,7 @@ public class BattlerBehaviour : MonoBehaviour
     // vPos = virtual position (as opposed to on-screen position)
     Vector3 vPos = new Vector3();
     private string facingDirection = "right";
-    Dictionary<string, bool> directionStatus = new Dictionary<string, bool>() {
+    protected Dictionary<string, bool> directionStatus = new Dictionary<string, bool>() {
         { "RIGHT", false },
         { "LEFT", false },
         { "UP", false },
@@ -33,15 +33,15 @@ public class BattlerBehaviour : MonoBehaviour
         { "ATTACK", false }
     };
     private bool beingHit = false;
-    private List<GameObject> hexSurround;
+    private Queue<GameObject> targetSpots;
 
     // Start is called before the first frame update
-    void Start() {
+    protected void Start() {
         vPos = PosToVPos(transform.position);
-        InitHexSurround();
+        InitTargetSpots();
     }
 
-    private void Awake() {
+    protected void Awake() {
         InitColliders();
     }
 
@@ -52,18 +52,18 @@ public class BattlerBehaviour : MonoBehaviour
         right = transform.Find("Right").GetComponent<SideCollider>();
     }
 
-    private void InitHexSurround() {
-        hexSurround = new List<GameObject>();
+    private void InitTargetSpots() {
+        targetSpots = new Queue<GameObject>();
 
-        hexSurround.Add(CreateHexPoint(2.5f, 0));
-        hexSurround.Add(CreateHexPoint(-2.5f, 0));
-        hexSurround.Add(CreateHexPoint(1.75f, 2.5f));
-        hexSurround.Add(CreateHexPoint(1.75f, -2.5f));
-        hexSurround.Add(CreateHexPoint(-1.75f, 2.5f));
-        hexSurround.Add(CreateHexPoint(-1.75f, -2.5f));
+        targetSpots.Enqueue(CreateTargetSpot(2.5f, 0));
+        targetSpots.Enqueue(CreateTargetSpot(-2.5f, 0));
+        targetSpots.Enqueue(CreateTargetSpot(1.75f, 2.5f));
+        targetSpots.Enqueue(CreateTargetSpot(1.75f, -2.5f));
+        targetSpots.Enqueue(CreateTargetSpot(-1.75f, 2.5f));
+        targetSpots.Enqueue(CreateTargetSpot(-1.75f, -2.5f));
     }
 
-    private GameObject CreateHexPoint(float x, float z) {
+    private GameObject CreateTargetSpot(float x, float z) {
         GameObject point = new GameObject();
         point.transform.SetParent(transform, false);
         point.transform.position = transform.position + VPosToPos(new Vector3(x, 0, z));
@@ -71,7 +71,7 @@ public class BattlerBehaviour : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {
+    protected void Update() {
         UpdateControl();
         UpdatePosition();
     }
@@ -128,12 +128,12 @@ public class BattlerBehaviour : MonoBehaviour
         return vec.normalized;
     }
 
-    Vector3 VPosToPos(Vector3 vPos) {
+    protected Vector3 VPosToPos(Vector3 vPos) {
         // return an actual coordinate position in space from a vPos
         return new Vector3(vPos.x, vPos.z * 0.5f - OFFSET_CONST, vPos.z * 0.866f);
     }
 
-    Vector3 PosToVPos(Vector3 pos) {
+    protected Vector3 PosToVPos(Vector3 pos) {
         return new Vector3(pos.x, (pos.z + OFFSET_CONST) / 0.5f, pos.z / 0.866f);
     }
 
@@ -262,5 +262,24 @@ public class BattlerBehaviour : MonoBehaviour
 
     public void SetStartPosition(int x, int z) {
         vPos = new Vector3(x, 0, z);
+    }
+
+    public GameObject GetAvailableTargetSpot() {
+        GameObject targetSpot;
+
+        try {
+            targetSpot = targetSpots.Dequeue();
+        } catch (System.InvalidOperationException e) {
+            return null;
+        }
+        return targetSpot;
+    }
+
+    public void EnqueueTargetSpot(GameObject targetSpot) {
+        targetSpots.Enqueue(targetSpot);
+    }
+
+    public Vector3 GetVPos() {
+        return vPos;
     }
 }
