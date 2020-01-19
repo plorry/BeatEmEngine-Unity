@@ -115,11 +115,6 @@ public class GameManager : MonoBehaviour
 
     private void HandleSceneLoad()
     {
-        if (curtainUp && !AudioManager.instance.isPlaying)
-        {
-            SceneManager.LoadScene(targetScene);
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
         if (sceneLoaded)
         {
             isChangingScenes = false;
@@ -145,6 +140,12 @@ public class GameManager : MonoBehaviour
             }
             FadeIn();
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            return;
+        }
+        if (curtainUp && !AudioManager.instance.isPlaying)
+        {
+            SceneManager.LoadScene(targetScene);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
     }
 

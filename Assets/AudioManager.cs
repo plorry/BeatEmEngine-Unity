@@ -22,10 +22,12 @@ public class AudioManager : MonoBehaviour
     // Clips
 
     public AudioClip playerJump;
+    public AudioClip playerLand;
     public AudioClip playerAtk;
     public AudioClip playerHit;
 
     public AudioClip enemyJump;
+    public AudioClip enemyLand;
     public AudioClip enemyAtk;
     public AudioClip enemyHit;
 
@@ -72,10 +74,12 @@ public class AudioManager : MonoBehaviour
         VerifyAudioSources();
         AssignSources();
         instance.audioLibrary.Add("playerJump", playerJump);
+        instance.audioLibrary.Add("playerLand", playerLand);
         instance.audioLibrary.Add("playerAtk", playerAtk);
         instance.audioLibrary.Add("playerHit", playerHit);
 
         instance.audioLibrary.Add("enemyJump", enemyJump);
+        instance.audioLibrary.Add("enemyLand", enemyLand);
         instance.audioLibrary.Add("enemyAtk", enemyAtk);
         instance.audioLibrary.Add("enemyHit", enemyHit);
 

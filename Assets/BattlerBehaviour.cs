@@ -196,6 +196,7 @@ public class BattlerBehaviour : MonoBehaviour
         if (CanJump()) {
             jumpVel = new Vector3(0, 0.15f, 0);
             inAir = true;
+            AudioManager.PlayClip("playerJump");
         }
         directionStatus["JUMP"] = true;
     }
@@ -223,6 +224,7 @@ public class BattlerBehaviour : MonoBehaviour
     public Vector3 Impulse(string direction, float magnitude) {
         inAir = true;
         LoseControl();
+        AudioManager.PlayClip("playerHit");
         if (direction == "right") {
             return new Vector3(0.15f, 0.05f, 0);
         } else if (direction == "left") {
@@ -237,6 +239,7 @@ public class BattlerBehaviour : MonoBehaviour
             directionStatus["ATTACK"] = true;
             LoseControl();
             Invoke("DoAttack", ATTACK_DELAY);
+            AudioManager.PlayClip("playerAtk");
 
             if (anim) {
                 anim.SetBool("attacking", true);

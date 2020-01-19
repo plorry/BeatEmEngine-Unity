@@ -355,16 +355,18 @@ MonoBehaviour:
   changingSong: 0
   isPlaying: 0
   isStopping: 0
-  playerJump: {fileID: 0}
-  playerAtk: {fileID: 0}
-  playerHit: {fileID: 0}
-  enemyJump: {fileID: 0}
-  enemyAtk: {fileID: 0}
-  enemyHit: {fileID: 0}
-  goodStuff: {fileID: 0}
-  badStuff: {fileID: 0}
-  powerUp: {fileID: 0}
-  powerDown: {fileID: 0}
+  playerJump: {fileID: 8300000, guid: beb4918581a4d8046b25ece2c21d19bc, type: 3}
+  playerLand: {fileID: 8300000, guid: 7d39632164a58ce4b88deaa7f12101dc, type: 3}
+  playerAtk: {fileID: 8300000, guid: 454f712eb5ed40040a09729ace256e29, type: 3}
+  playerHit: {fileID: 8300000, guid: 61d7a04280fd06941b742255e5313221, type: 3}
+  enemyJump: {fileID: 8300000, guid: a93cd137831425f4ab64312de8b3ec14, type: 3}
+  enemyLand: {fileID: 8300000, guid: 3f70346427e8fb040bbc6cb527e6455f, type: 3}
+  enemyAtk: {fileID: 8300000, guid: 69ef91e2471bf9b4ea8fc587314be141, type: 3}
+  enemyHit: {fileID: 8300000, guid: 35db88e233587494fbc8eb4965576473, type: 3}
+  goodStuff: {fileID: 8300000, guid: f8bfa335c48a99b4685efb2710d34588, type: 3}
+  badStuff: {fileID: 8300000, guid: 99e962ff19388824684beacb6081ad66, type: 3}
+  powerUp: {fileID: 8300000, guid: a9524e1f752f73a4795fc43b21c29189, type: 3}
+  powerDown: {fileID: 8300000, guid: 29a0694155fde944192f7458ee8adc0e, type: 3}
   song1: {fileID: 8300000, guid: 6d3ac8ca75bf3514f8748f8d0406f560, type: 3}
   song2: {fileID: 8300000, guid: 6d3ac8ca75bf3514f8748f8d0406f560, type: 3}
   song3: {fileID: 8300000, guid: 6d3ac8ca75bf3514f8748f8d0406f560, type: 3}
@@ -977,6 +979,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curtain: {fileID: 1395862812}
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   PlayerPrefab: {fileID: 2159776636211741129, guid: a3db22ed6d3d6eb4e89aa7c06eb73c70,
     type: 3}
 --- !u!1 &1823353057
