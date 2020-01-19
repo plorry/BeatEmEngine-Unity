@@ -9,6 +9,7 @@ public class BattlerBehaviour : MonoBehaviour
     SideCollider front;
     SideCollider back;
     private float OFFSET_CONST = 0.65f;
+    protected float ATTACK_DELAY = 0.1f;
     public float speed = 0.05f;
     Vector3 dirVector;
     public BattlerSpriteBehaviour playerSprite;
@@ -34,11 +35,13 @@ public class BattlerBehaviour : MonoBehaviour
     };
     private bool beingHit = false;
     private Queue<GameObject> targetSpots;
+    protected Animator anim;
 
     // Start is called before the first frame update
     protected void Start() {
         vPos = PosToVPos(transform.position);
         InitTargetSpots();
+        anim = playerSprite.GetComponent<Animator>();
     }
 
     protected void Awake() {
@@ -97,8 +100,12 @@ public class BattlerBehaviour : MonoBehaviour
         }
         // Get the direction of movement from the combined directions
         dirVector = GetDirVector();
+        if (anim) {
+            anim.SetFloat("speed", dirVector.magnitude);
+        }
         // apply the movement by the speed value
         vPos += (dirVector * (speed / (Time.deltaTime * 33)) + impulseVectorH);
+
         // and translate the virtual position to a coordinate position
         transform.position = VPosToPos(vPos);
     }
@@ -152,12 +159,12 @@ public class BattlerBehaviour : MonoBehaviour
     // _______PUBLIC_______
     
     public void GoRight() {
-        facingDirection = "right";
+        Turn("right");
         directionStatus["RIGHT"] = true;
     }
 
     public void GoLeft() {
-        facingDirection = "left";
+        Turn("left");
         directionStatus["LEFT"] = true;
     }
 
@@ -229,8 +236,16 @@ public class BattlerBehaviour : MonoBehaviour
         if (CanAttack()) {
             directionStatus["ATTACK"] = true;
             LoseControl();
-            Instantiate(attackBox, playerSprite.transform);
+            Invoke("DoAttack", ATTACK_DELAY);
+
+            if (anim) {
+                anim.SetBool("attacking", true);
+            }
         }
+    }
+
+    protected void DoAttack() {
+        Instantiate(attackBox, playerSprite.transform);
     }
 
     public void ResetAttack() {
@@ -238,17 +253,14 @@ public class BattlerBehaviour : MonoBehaviour
     }
 
     public void EndAttack() {
+        if (anim) {
+            anim.SetBool("attacking", false);
+        }
         GainControl();
     }
 
     public Vector3 GetActionPoint() {
-        if (facingDirection == "right") {
-            return new Vector3(0.66f, 0 , 0);
-        } else if (facingDirection == "left") {
-            return new Vector3(-0.66f, 0, 0);
-        } else {
-            return new Vector3();
-        }
+        return new Vector3(0.66f, 0 , 0);
     }
 
     public void Hit(string direction) {
@@ -281,5 +293,16 @@ public class BattlerBehaviour : MonoBehaviour
 
     public Vector3 GetVPos() {
         return vPos;
+    }
+
+    protected void Turn(string dir) {
+        string prevDir = facingDirection;
+        facingDirection = dir;
+
+        if (dir != prevDir) {
+            Vector3 scale = playerSprite.transform.localScale;
+            scale.x *= -1;
+            playerSprite.transform.localScale = scale;
+        }
     }
 }

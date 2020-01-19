@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackBox : MonoBehaviour
 {
-    float duration = 0.2f;
+    float duration = 0.1f;
     // Start is called before the first frame update
     void Start() {
         transform.Translate(GetParent().GetActionPoint());

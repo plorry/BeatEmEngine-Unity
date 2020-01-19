@@ -18,7 +18,6 @@ public class SideCollider : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log(other);
         blocked = true;    
     }
 
