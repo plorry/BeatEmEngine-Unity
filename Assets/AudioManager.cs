@@ -12,6 +12,13 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicPlayer;
     public AudioSource sfxPlayer;
 
+    public float fadeDuration = 1.0f;
+    public float targetVolume = 1.0f;
+    public string songToPlay;
+    public bool changingSong = false;
+    public bool isPlaying = false;
+    public bool isStopping = false;
+
     // Clips
 
     public AudioClip playerJump;
@@ -55,18 +62,15 @@ public class AudioManager : MonoBehaviour
         AudioClip thisClip = null;
         if(instance.audioLibrary.TryGetValue(clipName, out thisClip))
         {
-            Debug.Log(clipName);
             instance.sfxPlayer.PlayOneShot(thisClip);
         }
     }
 
-    void Start()
+    void Awake()
     {
-        instance.listenerObject = Camera.main;
-
-        instance.musicPlayer = listenerObject.GetComponents<AudioSource>()[0];
-        instance.sfxPlayer = listenerObject.GetComponents<AudioSource>()[1];
-
+        FindCamera();
+        VerifyAudioSources();
+        AssignSources();
         instance.audioLibrary.Add("playerJump", playerJump);
         instance.audioLibrary.Add("playerAtk", playerAtk);
         instance.audioLibrary.Add("playerHit", playerHit);
@@ -80,11 +84,120 @@ public class AudioManager : MonoBehaviour
 
         instance.audioLibrary.Add("powerUp", powerUp);
         instance.audioLibrary.Add("powerDown", powerDown);
+
+        instance.audioLibrary.Add("song1", song1);
+        instance.audioLibrary.Add("song2", song2);
+        instance.audioLibrary.Add("song3", song3);
+    }
+
+    void FindCamera()
+    {
+        instance.listenerObject = Camera.main;
+    }
+
+    void VerifyAudioSources()
+    {
+        AudioSource[] sources = instance.listenerObject.GetComponents<AudioSource>();
+        if(sources.Length < 2)
+        {
+            AudioSource newSource = listenerObject.gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
+            VerifyAudioSources();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(instance.listenerObject == null)
+        {
+            FindCamera();
+        }
+        VerifyAudioSources();
+        AssignSources();
+        if(instance.musicPlayer != null)
+        {
+            HandleMusicPlayer();
+        }
+    }
+
+    void HandleMusicPlayer()
+    {
+        if(instance.songToPlay != null && instance.musicPlayer.clip == null)
+        {
+            PlayMusic(instance.songToPlay);
+        }
+        if (instance.musicPlayer.volume > instance.targetVolume)
+        {
+            instance.musicPlayer.volume -= Time.deltaTime * 0.5f;
+        }
+        if (instance.musicPlayer.volume < instance.targetVolume)
+        {
+            instance.musicPlayer.volume += Time.deltaTime * 0.5f;
+        }
+        if (instance.changingSong && instance.musicPlayer.volume == 0f)
+        {
+            instance.musicPlayer.Stop();
+            instance.musicPlayer.Play();
+            instance.targetVolume = 1.0f;
+        }
+        if(instance.musicPlayer.volume == 0f)
+        {
+            instance.isPlaying = false;
+            if (instance.isStopping)
+            {
+                instance.musicPlayer.Stop();
+            }
+        }
+    }
+
+    void AssignSources()
+    {
+        if (instance.musicPlayer == null && instance.listenerObject != null)
+        {
+            instance.musicPlayer = listenerObject.GetComponents<AudioSource>()[0];
+            instance.musicPlayer.loop = true;
+            instance.sfxPlayer = listenerObject.GetComponents<AudioSource>()[1];
+        }
+    }
+
+    public static void FadeOutMusic()
+    {
+        instance.targetVolume = 0f;
+    }
+
+    public static void FadeInMusic()
+    {
+        instance.targetVolume = 1.0f;
+    }
+
+    public static void PlayMusic(string songName)
+    {
+        instance.songToPlay = songName;
+        AudioClip newSong = null;
+        if (instance.audioLibrary.TryGetValue(songName, out newSong))
+        {
+            instance.musicPlayer.clip = newSong;
+        }
+        instance.musicPlayer.Play();
+        instance.targetVolume = 1.0f;
+        instance.isStopping = false;
+        instance.isPlaying = true;
+    }
+
+    public static void StopMusic()
+    {
+        instance.isStopping = true;
+        FadeOutMusic();
+    }
+
+    public static void ChangeSong(string songName)
+    {
+        AudioClip newSong = null;
+        if (instance.audioLibrary.TryGetValue(songName, out newSong))
+        {
+            instance.musicPlayer.clip = newSong;
+        }
+        instance.changingSong = true;
+        FadeOutMusic();
     }
 }

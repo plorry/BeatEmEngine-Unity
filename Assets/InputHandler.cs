@@ -6,7 +6,8 @@ public class InputHandler : MonoBehaviour {
 
 	private static InputHandler inputHandler;
     public BattlerBehaviour player1;
-	private Event e;
+    public BattlerBehaviour player2;
+    private Event e;
 
     // singleton pattern
 	public static InputHandler instance {
@@ -32,9 +33,14 @@ public class InputHandler : MonoBehaviour {
 
     void Awake()
     {
-		// TODO maybe there's a better way to map these, but whatever
-		// Right now, these are pretty hard-mapped to the keyboard. We could maybed
-		// use an intermediary map to go from input event to these listeners...
+		
+    }
+
+    public void InitializeSinglePlayerControls()
+    {
+        // TODO maybe there's a better way to map these, but whatever
+        // Right now, these are pretty hard-mapped to the keyboard. We could maybed
+        // use an intermediary map to go from input event to these listeners...
         EventManager.StartListening("KeyDown-RightArrow", player1.GoRight);
         EventManager.StartListening("KeyUp-RightArrow", player1.StopRight);
         EventManager.StartListening("KeyDown-LeftArrow", player1.GoLeft);
@@ -43,9 +49,58 @@ public class InputHandler : MonoBehaviour {
         EventManager.StartListening("KeyDown-DownArrow", player1.GoDown);
         EventManager.StartListening("KeyUp-UpArrow", player1.StopUp);
         EventManager.StartListening("KeyUp-DownArrow", player1.StopDown);
-		// EventManager.StartListening("KeyDown-Space", player1.Jump);
-		// EventManager.StartListening("KeyUp-Space", player1.ResetJump);
-		EventManager.StartListening("KeyDown-A", player1.Attack);
-		EventManager.StartListening("KeyUp-A", player1.ResetAttack);
+        // EventManager.StartListening("KeyDown-Space", player1.Jump);
+        // EventManager.StartListening("KeyUp-Space", player1.ResetJump);
+        EventManager.StartListening("KeyDown-A", player1.Attack);
+        EventManager.StartListening("KeyUp-A", player1.ResetAttack);
+    }
+
+    public void InitializeTwoPlayerControls()
+    {
+        // TODO maybe there's a better way to map these, but whatever
+        // Right now, these are pretty hard-mapped to the keyboard. We could maybed
+        // use an intermediary map to go from input event to these listeners...
+        EventManager.StartListening("KeyDown-RightArrow", player1.GoRight);
+        EventManager.StartListening("KeyUp-RightArrow", player1.StopRight);
+        EventManager.StartListening("KeyDown-LeftArrow", player1.GoLeft);
+        EventManager.StartListening("KeyUp-LeftArrow", player1.StopLeft);
+        EventManager.StartListening("KeyDown-UpArrow", player1.GoUp);
+        EventManager.StartListening("KeyDown-DownArrow", player1.GoDown);
+        EventManager.StartListening("KeyUp-UpArrow", player1.StopUp);
+        EventManager.StartListening("KeyUp-DownArrow", player1.StopDown);
+        // EventManager.StartListening("KeyDown-RightShift", player1.Jump);
+        // EventManager.StartListening("KeyUp-RightShift", player1.ResetJump);
+        EventManager.StartListening("KeyDown-RightControl", player1.Attack);
+        EventManager.StartListening("KeyUp-RightControl", player1.ResetAttack);
+
+        EventManager.StartListening("KeyDown-D", player2.GoRight);
+        EventManager.StartListening("KeyUp-D", player2.StopRight);
+        EventManager.StartListening("KeyDown-A", player2.GoLeft);
+        EventManager.StartListening("KeyUp-A", player2.StopLeft);
+        EventManager.StartListening("KeyDown-W", player2.GoUp);
+        EventManager.StartListening("KeyDown-S", player2.GoDown);
+        EventManager.StartListening("KeyUp-W", player2.StopUp);
+        EventManager.StartListening("KeyUp-S", player2.StopDown);
+        // EventManager.StartListening("KeyDown-LeftShift", player2.Jump);
+        // EventManager.StartListening("KeyUp-LeftShift", player2.ResetJump);
+        EventManager.StartListening("KeyDown-LeftControl", player2.Attack);
+        EventManager.StartListening("KeyUp-LeftControl", player2.ResetAttack);
+    }
+
+    public void ClearControlEvents()
+    {
+        // Cancel Player Controls
+        EventManager.StopListening("KeyDown-RightArrow", player1.GoRight);
+        EventManager.StopListening("KeyUp-RightArrow", player1.StopRight);
+        EventManager.StopListening("KeyDown-LeftArrow", player1.GoLeft);
+        EventManager.StopListening("KeyUp-LeftArrow", player1.StopLeft);
+        EventManager.StopListening("KeyDown-UpArrow", player1.GoUp);
+        EventManager.StopListening("KeyDown-DownArrow", player1.GoDown);
+        EventManager.StopListening("KeyUp-UpArrow", player1.StopUp);
+        EventManager.StopListening("KeyUp-DownArrow", player1.StopDown);
+        EventManager.StopListening("KeyDown-Space", player1.Jump);
+        EventManager.StopListening("KeyUp-Space", player1.ResetJump);
+        EventManager.StopListening("KeyDown-A", player1.Attack);
+        EventManager.StopListening("KeyUp-A", player1.ResetAttack);
     }
 }
