@@ -367,7 +367,7 @@ MonoBehaviour:
   badStuff: {fileID: 8300000, guid: 99e962ff19388824684beacb6081ad66, type: 3}
   powerUp: {fileID: 8300000, guid: a9524e1f752f73a4795fc43b21c29189, type: 3}
   powerDown: {fileID: 8300000, guid: 29a0694155fde944192f7458ee8adc0e, type: 3}
-  song1: {fileID: 8300000, guid: 6d3ac8ca75bf3514f8748f8d0406f560, type: 3}
+  song1: {fileID: 8300000, guid: 6a5fe5b54737e144f8933fa42a184c96, type: 3}
   song2: {fileID: 8300000, guid: 6d3ac8ca75bf3514f8748f8d0406f560, type: 3}
   song3: {fileID: 8300000, guid: 6d3ac8ca75bf3514f8748f8d0406f560, type: 3}
 --- !u!1 &669205344
