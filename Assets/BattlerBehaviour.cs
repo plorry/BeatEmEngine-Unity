@@ -210,6 +210,7 @@ public class BattlerBehaviour : MonoBehaviour
         if (!hasControl) {
             GainControl();
         }
+        AudioManager.PlayClip("playerLand");
     }
 
     public void LoseControl() {
