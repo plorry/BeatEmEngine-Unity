@@ -26,7 +26,10 @@ public class BattlerSpriteBehaviour : MonoBehaviour
                 GetParent().Land();
                 break;
             case "AttackBox":
-                GetParent().Hit(other.gameObject.GetComponent<AttackBox>().GetFacingDirection());
+                GetParent().Hit(
+                    other.gameObject.GetComponent<AttackBox>().GetFacingDirection(),
+                    other.gameObject.GetComponent<AttackBox>().GetPower()
+                );
                 break;
             default:
                 break;

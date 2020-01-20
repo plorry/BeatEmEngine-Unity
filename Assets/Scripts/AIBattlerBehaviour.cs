@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class AIBattlerBehaviour : BattlerBehaviour
 {
+    public enum Mode {BORED, ALERT, COMBAT}
+
     public BattlerBehaviour target; // the target Battler
     private Transform targetSpot; // the target Spot to follow
+    protected Mode myMode;
 
     protected void Update() {
         base.Update();
@@ -16,6 +19,10 @@ public class AIBattlerBehaviour : BattlerBehaviour
 
         if (targetSpot) {
             MoveToward( PosToVPos(targetSpot.position) );
+        }
+
+        if (target) {
+            LookAtTarget();
         }
     }
 
@@ -46,6 +53,16 @@ public class AIBattlerBehaviour : BattlerBehaviour
         } else {
             StopUp();
             StopDown();
+        }
+    }
+
+    protected void LookAtTarget() {
+        float deltaX = target.transform.position.x - transform.position.x;
+
+        if (deltaX > 0 && facingDirection == Direction.LEFT) {
+            Turn(Direction.RIGHT);
+        } else if (deltaX < 0 && facingDirection == Direction.RIGHT) {
+            Turn(Direction.LEFT);
         }
     }
 

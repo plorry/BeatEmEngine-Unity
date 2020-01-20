@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class AttackBox : MonoBehaviour
 {
-    float duration = 0.1f;
+    private int attack_power;
     // Start is called before the first frame update
     void Start() {
         transform.Translate(GetParent().GetActionPoint());
-        Destroy(gameObject, duration);
     }
 
     // Update is called once per frame
@@ -16,7 +15,11 @@ public class AttackBox : MonoBehaviour
         
     }
 
-    public string GetFacingDirection() {
+    public void DestroyIn(float dur) {
+        Destroy(gameObject, dur);
+    }
+
+    public BattlerBehaviour.Direction GetFacingDirection() {
         return GetParent().GetParent().GetFacingDirection();
     }
 
@@ -26,5 +29,13 @@ public class AttackBox : MonoBehaviour
 
     private BattlerSpriteBehaviour GetParent() {
         return transform.parent.gameObject.GetComponent<BattlerSpriteBehaviour>();
+    }
+
+    public void SetPower(int power) {
+        attack_power = power;
+    }
+
+    public int GetPower() {
+        return attack_power;
     }
 }

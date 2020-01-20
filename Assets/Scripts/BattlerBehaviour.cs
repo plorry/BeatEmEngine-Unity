@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class BattlerBehaviour : MonoBehaviour
 {
+    public enum Direction {LEFT, RIGHT};
+
     SideCollider left;
     SideCollider right;
     SideCollider front;
     SideCollider back;
     private float OFFSET_CONST = 0.65f;
-    protected float ATTACK_DELAY = 0.1f;
-    public float speed = 0.05f;
     Vector3 dirVector;
     public BattlerSpriteBehaviour playerSprite;
     public AttackBox attackBox;
@@ -23,7 +23,7 @@ public class BattlerBehaviour : MonoBehaviour
     Vector3 impulseVectorH;
     // vPos = virtual position (as opposed to on-screen position)
     Vector3 vPos = new Vector3();
-    private string facingDirection = "right";
+    public Direction facingDirection = Direction.RIGHT;
     protected Dictionary<string, bool> directionStatus = new Dictionary<string, bool>() {
         { "RIGHT", false },
         { "LEFT", false },
@@ -36,6 +36,11 @@ public class BattlerBehaviour : MonoBehaviour
     private bool beingHit = false;
     private Queue<GameObject> targetSpots;
     protected Animator anim;
+    // ____ CONFIGURABLE PROPERTIES ____
+    public int attack_power = 1;
+    public float attack_delay = 0.1f;
+    public float attack_duration = 0.1f;
+    public float speed = 1.65f;
 
     // Start is called before the first frame update
     protected void Start() {
@@ -104,7 +109,7 @@ public class BattlerBehaviour : MonoBehaviour
             anim.SetFloat("speed", dirVector.magnitude);
         }
         // apply the movement by the speed value
-        vPos += (dirVector * (speed / (Time.deltaTime * 33)) + impulseVectorH);
+        vPos += (dirVector * (speed / (1000 * Time.deltaTime)) + impulseVectorH);
 
         // and translate the virtual position to a coordinate position
         transform.position = VPosToPos(vPos);
@@ -159,12 +164,12 @@ public class BattlerBehaviour : MonoBehaviour
     // _______PUBLIC_______
     
     public void GoRight() {
-        Turn("right");
+        Turn(Direction.RIGHT);
         directionStatus["RIGHT"] = true;
     }
 
     public void GoLeft() {
-        Turn("left");
+        Turn(Direction.LEFT);
         directionStatus["LEFT"] = true;
     }
 
@@ -222,14 +227,14 @@ public class BattlerBehaviour : MonoBehaviour
         hasControl = true;
     }
 
-    public Vector3 Impulse(string direction, float magnitude) {
+    public Vector3 Impulse(Direction direction, int magnitude) {
         inAir = true;
         LoseControl();
         AudioManager.PlayClip("playerHit");
-        if (direction == "right") {
-            return new Vector3(0.15f, 0.05f, 0);
-        } else if (direction == "left") {
-            return new Vector3(-0.15f, 0.05f, 0);
+        if (direction == Direction.RIGHT) {
+            return new Vector3(0.15f, 0.05f, 0) * magnitude;
+        } else if (direction == Direction.LEFT) {
+            return new Vector3(-0.15f, 0.05f, 0) * magnitude;
         } else {
             return new Vector3();
         }
@@ -239,8 +244,8 @@ public class BattlerBehaviour : MonoBehaviour
         if (CanAttack()) {
             directionStatus["ATTACK"] = true;
             LoseControl();
-            Invoke("DoAttack", ATTACK_DELAY);
             AudioManager.PlayClip("playerAtk");
+            Invoke("DoAttack", attack_delay);
 
             if (anim) {
                 anim.SetBool("attacking", true);
@@ -249,7 +254,9 @@ public class BattlerBehaviour : MonoBehaviour
     }
 
     protected void DoAttack() {
-        Instantiate(attackBox, playerSprite.transform);
+        AttackBox box = Instantiate(attackBox, playerSprite.transform);
+        box.SetPower(attack_power);
+        box.DestroyIn(attack_duration);
     }
 
     public void ResetAttack() {
@@ -267,12 +274,12 @@ public class BattlerBehaviour : MonoBehaviour
         return new Vector3(0.66f, 0 , 0);
     }
 
-    public void Hit(string direction) {
+    public void Hit(Direction direction, int power) {
         beingHit = true;
-        jumpVel = Impulse(direction, 1);
+        jumpVel = Impulse(direction, power);
     }
 
-    public string GetFacingDirection() {
+    public Direction GetFacingDirection() {
         return facingDirection;
     }
 
@@ -299,8 +306,8 @@ public class BattlerBehaviour : MonoBehaviour
         return vPos;
     }
 
-    protected void Turn(string dir) {
-        string prevDir = facingDirection;
+    protected void Turn(Direction dir) {
+        Direction prevDir = facingDirection;
         facingDirection = dir;
 
         if (dir != prevDir) {
