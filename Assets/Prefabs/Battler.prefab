@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: 6237577735110113454}
   - component: {fileID: 6237577735110113449}
   - component: {fileID: 6237577735110113450}
+  - component: {fileID: 1458773092}
   m_Layer: 0
   m_Name: PlayerSprite
   m_TagString: Untagged
@@ -368,7 +369,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 45fa1457b5c5c44418932df0dfc6218e, type: 3}
-  m_Color: {r: 0.9811321, g: 0.8755658, b: 0.61552155, a: 1}
+  m_Color: {r: 0.6156863, g: 0.83962405, b: 0.98039216, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -419,6 +420,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 136f89ae770dd42c0a19c6480158f374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &1458773092
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6237577735110113621}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 469293a65820147c6a06838618d389d1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6237577735390063279
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +508,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b936944764ea14a10a5105c3c865dfa0, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.39215687}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -507,7 +527,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6237577735426031858}
-  - component: {fileID: 6237577735426031869}
+  - component: {fileID: 457514182}
   m_Layer: 0
   m_Name: Battler
   m_TagString: Untagged
@@ -535,7 +555,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6237577735426031869
+--- !u!114 &457514182
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -544,10 +564,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6237577735426031868}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fddb97c7a388c4394b952fa4558d834b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fd62a6d7207543079cc8b08b84581a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerSprite: {fileID: 6237577735110113450}
   attackBox: {fileID: 7945188621559695345, guid: 2013dd3542b144c169ba7d1834c78950,
     type: 3}
   hasControl: 1
+  facingDirection: 0
+  attack_power: 1
+  attack_delay: 0.1
+  attack_duration: 0.1
+  speed: 0.5
+  target: {fileID: 0}

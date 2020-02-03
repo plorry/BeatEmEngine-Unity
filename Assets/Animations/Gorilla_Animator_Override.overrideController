@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Gorilla_Animator_Override
+  m_Controller: {fileID: 9100000, guid: bb2180a6ec8944cb4b21b428157624df, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: e9889610996a64c86bb16ac9831646fd, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e9889610996a64c86bb16ac9831646fd, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 8eb8dc8ce16fc43bf9450ea636a4d000, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 8eb8dc8ce16fc43bf9450ea636a4d000, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 55b6037d3c1804dd08c8782c13d61f87, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 55b6037d3c1804dd08c8782c13d61f87, type: 2}
